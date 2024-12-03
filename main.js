@@ -21,24 +21,34 @@ addBookToLibrary(theHobbit);
 const ucazz = new Book("puzzo", "sporco", 295, "Not read yet");
 addBookToLibrary(ucazz);
 
-const bookContainer = document.querySelector("#books-container");
+function createBookElement(text, type) {
+  const element = document.createElement(type);
+  element.textContent = text;
+  return element;
+}
+
+function createBook(book) {
+  const bookCard = document.createElement("div");
+  bookCard.classList.add("book");
+
+  const elements = [
+    createBookElement(book.title, "h2"),
+    createBookElement(book.author, "h3"),
+    createBookElement(book.pages, "p"),
+    createBookElement(book.read, "p"),
+  ];
+
+  elements.forEach((element) => {
+    bookCard.appendChild(element);
+  });
+
+  return bookCard;
+}
 
 function displayLibrary(array) {
-  array.forEach((element) => {
-    const bookCard = document.createElement("div");
-    const bookTitle = document.createElement("h2");
-    const bookAuthor = document.createElement("h3");
-    const bookPages = document.createElement("p");
-    const bookRead = document.createElement("p");
-    bookCard.classList.add("book");
-    bookTitle.textContent = element.title;
-    bookAuthor.textContent = element.author;
-    bookPages.textContent = element.pages;
-    bookRead.textContent = element.read;
-    bookCard.appendChild(bookTitle);
-    bookCard.appendChild(bookAuthor);
-    bookCard.appendChild(bookPages);
-    bookCard.appendChild(bookRead);
+  const bookContainer = document.querySelector("#books-container");
+  array.forEach((book) => {
+    const bookCard = createBook(book);
     bookContainer.appendChild(bookCard);
   });
 }
