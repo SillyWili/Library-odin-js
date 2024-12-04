@@ -9,7 +9,30 @@
   </head>
   <body>
     <header></header>
-    <main><div id="books-container"></div></main>
+    <main>
+      <button id="addBook">+ Add Book</button>
+      <div id="books-container"></div>
+    </main>
     <footer></footer>
+    <dialog>
+      <form>
+        <label for="book-name">Title</label>
+        <input type="text" name="bookTitle" id="book-name" required />
+        <label for="book-author">Author</label>
+        <input type="text" name="bookAuthor" id="book-author" required />
+        <label for="book-pages">Pages</label>
+        <input
+          type="number"
+          name="bookPages"
+          id="book-pages"
+          min="0"
+          required
+        />
+        <label for="book-read">Have your read it?</label>
+        <input type="checkbox" name="bookRead" id="book-read" />
+        <button id="closeBtn" formmethod="dialog">Cancel</button>
+        <button id="confirmBtn" type="submit">Confirm</button>
+      </form>
+    </dialog>
   </body>
 </html>

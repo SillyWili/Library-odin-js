@@ -7,10 +7,6 @@ function Book(title, author, pages, read) {
   this.read = read;
 }
 
-Book.prototype.info = function () {
-  return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
-};
-
 function addBookToLibrary(book) {
   myLibrary.push(book);
 }
@@ -47,10 +43,51 @@ function createBook(book) {
 
 function displayLibrary(array) {
   const bookContainer = document.querySelector("#books-container");
+  if (bookContainer.innerHTML !== "") {
+    bookContainer.innerHTML = "";
+  }
   array.forEach((book) => {
     const bookCard = createBook(book);
     bookContainer.appendChild(bookCard);
   });
 }
 
-displayLibrary(myLibrary);
+//* dialog action
+
+const closeBtn = document.querySelector("#closeBtn");
+const confirmBtn = document.querySelector("#confirmBtn");
+const addBtn = document.querySelector("#addBook");
+const dialog = document.querySelector("dialog");
+const form = document.querySelector("form");
+
+addBtn.addEventListener("click", () => {
+  dialog.showModal();
+});
+
+closeBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  dialog.close();
+});
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  createBookForm(event.target);
+  dialog.close();
+});
+
+function createBookForm(form) {
+  if (form[3].checked === true) {
+    form[3].value = "Read";
+  } else {
+    form[3].value = "Not read yet";
+  }
+
+  const book = new Book(
+    form[0].value,
+    form[1].value,
+    form[2].value,
+    form[3].value
+  );
+  addBookToLibrary(book);
+  displayLibrary(myLibrary);
+}
