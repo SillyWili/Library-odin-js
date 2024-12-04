@@ -32,6 +32,7 @@ function createBook(book) {
     createBookElement(book.author, "h3"),
     createBookElement(book.pages, "p"),
     createBookElement(book.read, "p"),
+    createBookElement("remove", "button"),
   ];
 
   elements.forEach((element) => {
@@ -49,6 +50,17 @@ function displayLibrary(array) {
   array.forEach((book) => {
     const bookCard = createBook(book);
     bookContainer.appendChild(bookCard);
+  });
+  removeBookFromDOM();
+}
+
+function removeBookFromDOM() {
+  const removeBtn = document.querySelectorAll(".book button");
+  removeBtn.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const card = event.target.closest(".book");
+      card.remove();
+    });
   });
 }
 
