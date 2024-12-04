@@ -59,22 +59,20 @@ function displayLibrary(array) {
     bookContainer.appendChild(bookCard);
   });
 
-  updateReadInsideDOM();
-  removeBookInsideDOM();
+  updateReadInsideDOM(bookContainer);
+  removeBookInsideDOM(bookContainer);
 }
 
 //* Changes the status of read
-function updateReadInsideDOM() {
-  const readBtn = document.querySelectorAll("button.read");
-  readBtn.forEach((button) => {
-    button.addEventListener("click", (event) => {
+function updateReadInsideDOM(container) {
+  container.addEventListener("click", (event) => {
+    if (event.target.classList.contains("read")) {
       const card = event.target.closest(".book");
       const index = card.getAttribute("index");
-
       const book = myLibrary[index];
       book.changeRead();
-      button.textContent = book.read;
-    });
+      event.target.textContent = book.read;
+    }
   });
 }
 
@@ -86,18 +84,15 @@ function updateDOMIndices() {
   });
 }
 
-function removeBookInsideDOM() {
-  const removeBtn = document.querySelectorAll("button.remove");
-  removeBtn.forEach((button) => {
-    button.addEventListener("click", (event) => {
+function removeBookInsideDOM(container) {
+  container.addEventListener("click", (event) => {
+    if (event.target.classList.contains("remove")) {
       const card = event.target.closest(".book");
       const index = card.getAttribute("index");
-
       myLibrary.splice(index, 1);
       card.remove();
-
       updateDOMIndices();
-    });
+    }
   });
 }
 
