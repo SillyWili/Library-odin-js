@@ -11,28 +11,35 @@ function addBookToLibrary(book) {
   myLibrary.push(book);
 }
 
-const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, "Not read yet");
-addBookToLibrary(theHobbit);
+Book.prototype.changeRead = function () {
+  if (this.read === "Read") {
+    this.read = "Not read yet";
+  } else {
+    this.read = "Read";
+  }
+};
 
-const ucazz = new Book("puzzo", "sporco", 295, "Not read yet");
-addBookToLibrary(ucazz);
-
-function createBookElement(text, type) {
+//* Creates books in the DOM inside their Container
+function createBookElement(text, type, cls) {
   const element = document.createElement(type);
   element.textContent = text;
+  if (cls === "read" || cls === "remove") {
+    element.classList.add(cls);
+  }
   return element;
 }
 
-function createBook(book) {
+function createBook(book, index) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book");
+  bookCard.setAttribute("index", index);
 
   const elements = [
     createBookElement(book.title, "h2"),
     createBookElement(book.author, "h3"),
     createBookElement(book.pages, "p"),
-    createBookElement(book.read, "p"),
-    createBookElement("remove", "button"),
+    createBookElement(book.read, "button", "read"),
+    createBookElement("remove", "button", "remove"),
   ];
 
   elements.forEach((element) => {
@@ -44,28 +51,57 @@ function createBook(book) {
 
 function displayLibrary(array) {
   const bookContainer = document.querySelector("#books-container");
-  if (bookContainer.innerHTML !== "") {
-    bookContainer.innerHTML = "";
-  }
+  bookContainer.innerHTML = "";
   array.forEach((book) => {
-    const bookCard = createBook(book);
+    const index = myLibrary.indexOf(book);
+    const bookCard = createBook(book, index);
+
     bookContainer.appendChild(bookCard);
   });
-  removeBookFromDOM();
+
+  updateReadInsideDOM();
+  removeBookInsideDOM();
 }
 
-function removeBookFromDOM() {
-  const removeBtn = document.querySelectorAll(".book button");
+//* Changes the status of read
+function updateReadInsideDOM() {
+  const readBtn = document.querySelectorAll("button.read");
+  readBtn.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const card = event.target.closest(".book");
+      const index = card.getAttribute("index");
+
+      const book = myLibrary[index];
+      book.changeRead();
+      button.textContent = book.read;
+    });
+  });
+}
+
+//* Removes a book and re-assigns the indexes
+function updateDOMIndices() {
+  const bookCards = document.querySelectorAll(".book");
+  bookCards.forEach((card, newIndex) => {
+    card.setAttribute("index", newIndex);
+  });
+}
+
+function removeBookInsideDOM() {
+  const removeBtn = document.querySelectorAll("button.remove");
   removeBtn.forEach((button) => {
     button.addEventListener("click", (event) => {
       const card = event.target.closest(".book");
+      const index = card.getAttribute("index");
+
+      myLibrary.splice(index, 1);
       card.remove();
+
+      updateDOMIndices();
     });
   });
 }
 
 //* dialog action
-
 const closeBtn = document.querySelector("#closeBtn");
 const confirmBtn = document.querySelector("#confirmBtn");
 const addBtn = document.querySelector("#addBook");
@@ -88,12 +124,14 @@ form.addEventListener("submit", (event) => {
 });
 
 function createBookForm(form) {
+  //* Gives value to the checkbox
   if (form[3].checked === true) {
     form[3].value = "Read";
   } else {
     form[3].value = "Not read yet";
   }
 
+  //* Creates new book with form values
   const book = new Book(
     form[0].value,
     form[1].value,
@@ -102,4 +140,5 @@ function createBookForm(form) {
   );
   addBookToLibrary(book);
   displayLibrary(myLibrary);
+  form.reset();
 }
