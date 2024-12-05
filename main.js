@@ -58,25 +58,9 @@ function displayLibrary(array) {
 
     bookContainer.appendChild(bookCard);
   });
-
-  updateReadInsideDOM(bookContainer);
-  removeBookInsideDOM(bookContainer);
 }
 
-//* Changes the status of read
-function updateReadInsideDOM(container) {
-  container.addEventListener("click", (event) => {
-    if (event.target.classList.contains("read")) {
-      const card = event.target.closest(".book");
-      const index = card.getAttribute("index");
-      const book = myLibrary[index];
-      book.changeRead();
-      event.target.textContent = book.read;
-    }
-  });
-}
-
-//* Removes a book and re-assigns the indexes
+//* Syncs indexes to DOM elements
 function updateDOMIndices() {
   const bookCards = document.querySelectorAll(".book");
   bookCards.forEach((card, newIndex) => {
@@ -84,17 +68,29 @@ function updateDOMIndices() {
   });
 }
 
-function removeBookInsideDOM(container) {
-  container.addEventListener("click", (event) => {
+//* Changes the status of read and Removes books
+function libraryHandler() {
+  const booksContainer = document.querySelector("#books-container");
+
+  booksContainer.addEventListener("click", (event) => {
+    const card = event.target.closest(".book");
+    const index = card.getAttribute("index");
+
+    if (event.target.classList.contains("read")) {
+      const book = myLibrary[index];
+      book.changeRead();
+      event.target.textContent = book.read;
+    }
+
     if (event.target.classList.contains("remove")) {
-      const card = event.target.closest(".book");
-      const index = card.getAttribute("index");
       myLibrary.splice(index, 1);
       card.remove();
       updateDOMIndices();
     }
   });
 }
+
+libraryHandler();
 
 //* dialog action
 const closeBtn = document.querySelector("#closeBtn");
