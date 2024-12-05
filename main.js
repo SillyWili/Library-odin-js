@@ -39,7 +39,7 @@ function createBook(book, index) {
     createBookElement(book.author, "h3"),
     createBookElement(book.pages, "p"),
     createBookElement(book.read, "button", "read"),
-    createBookElement("remove", "button", "remove"),
+    createBookElement("Remove", "button", "remove"),
   ];
 
   elements.forEach((element) => {
