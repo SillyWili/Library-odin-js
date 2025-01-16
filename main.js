@@ -1,23 +1,25 @@
 const myLibrary = [];
 
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
+class Book {
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
+
+  changeRead() {
+    if (this.read === "Read") {
+      this.read = "Not read yet";
+    } else {
+      this.read = "Read";
+    }
+  }
 }
 
 function addBookToLibrary(book) {
   myLibrary.push(book);
 }
-
-Book.prototype.changeRead = function () {
-  if (this.read === "Read") {
-    this.read = "Not read yet";
-  } else {
-    this.read = "Read";
-  }
-};
 
 //* Creates books in the DOM inside their Container
 function createBookElement(text, type, cls) {
