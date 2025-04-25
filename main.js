@@ -107,6 +107,7 @@ addBtn.addEventListener("click", () => {
 
 closeBtn.addEventListener("click", (event) => {
   event.preventDefault();
+  form.reset();
   dialog.close();
 });
 
